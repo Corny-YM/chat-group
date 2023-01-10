@@ -23,21 +23,23 @@ const AuthProvider = ({ children }) => {
                 setUser({ displayName, email, uid, photoURL });
                 setIsLoading(false);
                 navigate('/');
-            } else {
-                navigate('/login');
+                return;
             }
+
+            setIsLoading(false);
+            navigate('/login');
         });
 
         return () => {
             unsub();
         };
     }, []);
-
     return (
-        <AuthContext.Provider value={user}>
+        <AuthContext.Provider value={{ user }}>
             {isLoading ? <Spin style={{ position: 'fixed', inset: 0 }} /> : children}
         </AuthContext.Provider>
     );
 };
 
+export { AuthContext };
 export default AuthProvider;

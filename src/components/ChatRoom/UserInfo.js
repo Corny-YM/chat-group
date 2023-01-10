@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 
 // antd
 import { Avatar, Button, Typography } from 'antd';
 
+// firebase
+import { signOut } from 'firebase/auth';
+import { collection, onSnapshot } from 'firebase/firestore';
+import { auth, db } from '../../firebase/config';
+
 import styled from 'styled-components';
+
+import { AuthContext } from '../../Context/AuthProvider';
 
 const WrapperStyled = styled.div`
     display: flex;
@@ -18,13 +25,21 @@ const WrapperStyled = styled.div`
 `;
 
 const UserInfo = () => {
+    const {
+        user: { displayName, photoURL },
+    } = useContext(AuthContext);
+
     return (
         <WrapperStyled>
             <div>
-                <Avatar src="" />
-                <Typography.Text className="username">ABC</Typography.Text>
+                <Avatar src={photoURL}>
+                    {photoURL ? '' : displayName?.charAt(0)?.toUpperCase()}
+                </Avatar>
+                <Typography.Text className="username">{displayName}</Typography.Text>
             </div>
-            <Button ghost>Logout</Button>
+            <Button ghost onClick={() => signOut(auth)}>
+                Logout
+            </Button>
         </WrapperStyled>
     );
 };
